@@ -9,7 +9,7 @@ pub mod parsers;
 
 use std::fs;
 
-use clap::{Arg, App};
+use clap::{App, Arg};
 use indexmap::IndexMap;
 use pest::Parser;
 
@@ -22,32 +22,31 @@ fn main() {
         .about("Fill configuration files with values from profiles")
         .arg(
             Arg::with_name("config")
-            .help("The config file used as template")
-            .long("config")
-            .required(true)
-            .short("c")
-            .takes_value(true)
-            .value_name("FILE")
-        )
-        .arg(
+                .help("The config file used as template")
+                .long("config")
+                .required(true)
+                .short("c")
+                .takes_value(true)
+                .value_name("FILE"),
+        ).arg(
             Arg::with_name("profile")
-            .help("The profile used to fill the template")
-            .long("profile")
-            .required(true)
-            .short("p")
-            .takes_value(true)
-            .value_name("FILE")
-        )
-        .get_matches();
+                .help("The profile used to fill the template")
+                .long("profile")
+                .required(true)
+                .short("p")
+                .takes_value(true)
+                .value_name("FILE"),
+        ).get_matches();
 
     let config = matches.value_of("config").unwrap();
 
-    let unparsed_config = fs::read_to_string(config)
-        .expect(&format!("cannot read file {}", config));
+    let unparsed_config =
+        fs::read_to_string(config).expect(&format!("cannot read file {}", config));
 
     let parsed_config = slice::SliceParser::parse(slice::Rule::FILE, &unparsed_config)
         .expect("Not able to parse")
-        .next().unwrap();
+        .next()
+        .unwrap();
 
     let mut parsed_map = IndexMap::new();
     for line in parsed_config.into_inner() {
