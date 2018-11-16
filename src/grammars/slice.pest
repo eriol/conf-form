@@ -1,0 +1,37 @@
+// A simplyfied parser for zeroc configuration.
+// See https://doc.zeroc.com/ice/latest/properties-and-configuration for
+// details.
+
+CHAR = { ASCII_ALPHANUMERIC | "." | "_" | WHITESPACE }
+NO_NEWLINE = _{ !NEWLINE ~ ANY }
+WHITESPACE = _{ " " }
+
+SEPARATOR = _{ "=" }
+
+NAME = @{ CHAR+ }
+VALUE = @{
+    (
+        CHAR
+        | "/"
+        | ":"
+        | ","
+        | "-"
+        | "?"
+        | "="
+        | "!"
+        | "\""
+        | "\\"
+        | "{"
+        | "}"
+        | ";" 
+        | "<"
+        | ">"
+        | "&"
+        | WHITESPACE
+    )*
+}
+PROPERTY = { NAME ~ SEPARATOR ~ VALUE }
+
+COMMENT = _{ "#" ~ NO_NEWLINE* }
+
+FILE = { SOI ~ ((COMMENT | PROPERTY)? ~ NEWLINE)* ~ EOI }

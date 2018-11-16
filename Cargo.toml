@@ -1,0 +1,12 @@
+[package]
+name = "conf-form"
+version = "0.1.0"
+authors = ["Daniele Tricoli <eriol@mornie.org>"]
+
+[dependencies]
+clap = "2.32.0"
+indexmap = "1.0.2"
+pest = "2.0"
+pest_derive = "2.0"
+serde = "1.0.80"
+serde_yaml = "0.8.7"
