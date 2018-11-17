@@ -1,11 +1,12 @@
 // A simplyfied parser for zeroc configuration.
+// This parser is stricter of the default one, for example spaces in properties
+// are not allowed.
 // See https://doc.zeroc.com/ice/latest/properties-and-configuration for
-// details.
+// details about zeroc configuration.
 
-CHAR = { ASCII_ALPHANUMERIC | "." | "_" | WHITESPACE }
+CHAR = { ASCII_ALPHANUMERIC | "." | "_" }
 NO_NEWLINE = _{ !NEWLINE ~ ANY }
 WHITESPACE = _{ " " }
-
 SEPARATOR = _{ "=" }
 
 NAME = @{ CHAR+ }
