@@ -7,6 +7,7 @@ extern crate pest;
 
 pub mod parsers;
 
+use std::collections::BTreeMap;
 use std::fs;
 
 use clap::{App, Arg};
@@ -39,9 +40,7 @@ fn main() {
         ).get_matches();
 
     let config = matches.value_of("config").unwrap();
-
-    let unparsed_config =
-        fs::read_to_string(config).expect(&format!("cannot read file {}", config));
+    let unparsed_config = fs::read_to_string(config).expect(&format!("cannot read {}", config));
 
     let parsed_config = slice::SliceParser::parse(slice::Rule::FILE, &unparsed_config)
         .expect("Not able to parse")
@@ -53,8 +52,8 @@ fn main() {
         match line.as_rule() {
             slice::Rule::PROPERTY => {
                 let mut inner_rules = line.into_inner();
-                let name: &str = inner_rules.next().unwrap().as_str();
-                let value: &str = inner_rules.next().unwrap().as_str();
+                let name = inner_rules.next().unwrap().as_str().to_string();
+                let value = inner_rules.next().unwrap().as_str().to_string();
                 parsed_map.insert(name, value);
             }
             slice::Rule::EOI => (),
@@ -62,7 +61,16 @@ fn main() {
         }
     }
 
+    let profile = matches.value_of("profile").unwrap();
+    let profile = fs::read_to_string(profile).expect(&format!("cannot read {}", profile));
+    let deserialized_map: BTreeMap<String, String> = serde_yaml::from_str(&profile).unwrap();
+    for (k, v) in deserialized_map {
+        if let Some(val) = parsed_map.get_mut(&k) {
+            *val = v;
+        }
+    }
+
     for (k, v) in &parsed_map {
-        println!("{} {}", k, v);
+        println!("{} = {}", k, v);
     }
 }
