@@ -47,6 +47,7 @@ impl Config {
         }
     }
 
+    /// Print Config to stdout.
     pub fn print(&self) {
         for (k, v) in &self.map {
             println!("{} = {}", k, v);
