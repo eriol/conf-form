@@ -39,19 +39,13 @@ fn main() {
 
     let config = matches.value_of("config").unwrap();
     let config = fs::read_to_string(config).expect(&format!("cannot read {}", config));
-    let mut parsed_map = slice::parse_into_indexmap(&config).expect("Unable to parse.");
+    let mut parsed = slice::parse(&config).expect("Unable to parse.");
 
     let profile = matches.value_of("profile").unwrap();
     let profile = fs::read_to_string(profile).expect(&format!("cannot read {}", profile));
     let profile_map: BTreeMap<String, String> = serde_yaml::from_str(&profile).unwrap();
 
-    for (k, v) in profile_map {
-        if let Some(val) = parsed_map.get_mut(&k) {
-            *val = v;
-        }
-    }
+    parsed.update(profile_map);
 
-    for (k, v) in &parsed_map {
-        println!("{} = {}", k, v);
-    }
+    parsed.print();
 }
