@@ -37,12 +37,12 @@ fn main() {
                 .value_name("FILE"),
         ).get_matches();
 
-    let config = matches.value_of("config").unwrap();
-    let config = fs::read_to_string(config).expect(&format!("cannot read {}", config));
+    let config = fs::read_to_string(matches.value_of("config").unwrap())
+        .expect("Can't read the configuration file.");
     let mut parsed = slice::parse(&config).expect("Unable to parse.");
 
-    let profile = matches.value_of("profile").unwrap();
-    let profile = fs::read_to_string(profile).expect(&format!("cannot read {}", profile));
+    let profile = fs::read_to_string(matches.value_of("profile").unwrap())
+        .expect("Can't read the profile file.");
     let profile_map: BTreeMap<String, String> = serde_yaml::from_str(&profile).unwrap();
 
     parsed.update(profile_map);
