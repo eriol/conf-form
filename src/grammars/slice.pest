@@ -1,3 +1,8 @@
+// Copyright © 2018 Daniele Tricoli <eriol@mornie.org>.
+// All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
 // A simplified parser for zeroc configuration.
 // This parser is stricter of the default one, for example spaces in properties
 // are not allowed.
@@ -24,7 +29,7 @@ VALUE = @{
         | "\\"
         | "{"
         | "}"
-        | ";" 
+        | ";"
         | "<"
         | ">"
         | "&"
