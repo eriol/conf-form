@@ -19,10 +19,13 @@ use clap::{App, Arg};
 
 use crate::parsers::slice;
 
+const VERSION: &str = "0.1.0";
+const AUTHOR: &str = "Daniele Tricoli <eriol@mornie.org>";
+
 fn main() {
     let matches = App::new("conf-form")
-        .version("0.1.0")
-        .author("Daniele Tricoli <eriol@mornie.org>")
+        .version(VERSION)
+        .author(AUTHOR)
         .about("Fill configuration files with values from profiles")
         .arg(
             Arg::with_name("config")
