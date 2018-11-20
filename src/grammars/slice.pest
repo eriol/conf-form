@@ -9,7 +9,7 @@
 // See https://doc.zeroc.com/ice/latest/properties-and-configuration for
 // details about zeroc configuration.
 
-CHAR = { ASCII_ALPHANUMERIC | "." | "_" }
+CHAR = { ASCII_ALPHANUMERIC | "." | "_" | "-" }
 NO_NEWLINE = _{ !NEWLINE ~ ANY }
 WHITESPACE = _{ " " }
 SEPARATOR = _{ "=" }
@@ -18,21 +18,26 @@ NAME = @{ CHAR+ }
 VALUE = @{
     (
         CHAR
-        | "/"
-        | ":"
+        | "!"
+        | "%"
+        | "&"
+        | "*"
+        | "+"
         | ","
         | "-"
-        | "?"
-        | "="
-        | "!"
-        | "\""
-        | "\\"
-        | "{"
-        | "}"
+        | "/"
+        | ":"
         | ";"
         | "<"
+        | "="
         | ">"
-        | "&"
+        | "?"
+        | "["
+        | "\""
+        | "\\"
+        | "]"
+        | "{"
+        | "}"
         | WHITESPACE
     )*
 }
