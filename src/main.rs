@@ -7,6 +7,7 @@
 extern crate pest_derive;
 
 extern crate clap;
+extern crate colored;
 extern crate indexmap;
 extern crate pest;
 
@@ -17,6 +18,7 @@ use std::fs;
 use std::process;
 
 use clap::{App, Arg};
+use colored::Colorize;
 
 use crate::parsers::slice;
 
@@ -52,7 +54,10 @@ fn main() {
     let mut config = match slice::parse(&config_file) {
         Ok(config) => config,
         Err(err) => {
-            println!("An error occurred parsing configuration file:");
+            println!(
+                "{}",
+                "An error occurred parsing configuration file:".red().bold()
+            );
             println!("{}", err);
             process::exit(1);
         }
