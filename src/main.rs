@@ -14,6 +14,7 @@ pub mod parsers;
 
 use std::collections::BTreeMap;
 use std::fs;
+use std::process;
 
 use clap::{App, Arg};
 
@@ -45,15 +46,23 @@ fn main() {
                 .value_name("FILE"),
         ).get_matches();
 
-    let config = fs::read_to_string(matches.value_of("config").unwrap())
+    let config_file = fs::read_to_string(matches.value_of("config").unwrap())
         .expect("Can't read the configuration file.");
-    let mut parsed = slice::parse(&config).expect("Unable to parse.");
+
+    let mut config = match slice::parse(&config_file) {
+        Ok(config) => config,
+        Err(err) => {
+            println!("An error occurred parsing configuration file:");
+            println!("{}", err);
+            process::exit(1);
+        }
+    };
 
     let profile = fs::read_to_string(matches.value_of("profile").unwrap())
         .expect("Can't read the profile file.");
     let profile_map: BTreeMap<String, String> = serde_yaml::from_str(&profile).unwrap();
 
-    parsed.update(profile_map);
+    config.update(profile_map);
 
-    parsed.print();
+    config.print();
 }
