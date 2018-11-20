@@ -21,7 +21,7 @@ use crate::parsers::slice;
 
 fn main() {
     let matches = App::new("conf-form")
-        .version("0.1")
+        .version("0.1.0")
         .author("Daniele Tricoli <eriol@mornie.org>")
         .about("Fill configuration files with values from profiles")
         .arg(
