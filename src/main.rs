@@ -24,6 +24,7 @@ use colored::Colorize;
 use crate::parsers::slice;
 
 const AUTHOR: &str = "Daniele Tricoli <eriol@mornie.org>";
+const ERROR_PARSING: &str = "An error occurred while parsing:";
 
 fn main() {
     let matches = App::new("conf-form")
@@ -48,32 +49,26 @@ fn main() {
                 .value_name("FILE"),
         ).get_matches();
 
-    let config_file = fs::read_to_string(matches.value_of("config").unwrap())
-        .expect("Can't read the configuration file.");
+    // We can unwrap because config is required.
+    let config_file = matches.value_of("config").unwrap();
+    let config = read_file(config_file);
 
-    let mut config = match slice::parse(&config_file) {
+    let mut config = match slice::parse(&config) {
         Ok(config) => config,
         Err(err) => {
-            println!(
-                "{}:\n{}",
-                "An error occurred parsing configuration file:".red().bold(),
-                err
-            );
+            println!("{}: {}:\n{}", ERROR_PARSING.red().bold(), &config_file, err);
             process::exit(1);
         }
     };
 
-    let profile_file = fs::read_to_string(matches.value_of("profile").unwrap())
-        .expect("Can't read the profile file.");
+    // We can unwrap because profile is required.
+    let profile_file = matches.value_of("profile").unwrap();
+    let profile = read_file(profile_file);
 
-    let profile: BTreeMap<String, String> = match serde_yaml::from_str(&profile_file) {
+    let profile: BTreeMap<String, String> = match serde_yaml::from_str(&profile) {
         Ok(profile) => profile,
         Err(err) => {
-            println!(
-                "{}: {}",
-                "An error occurred parsing profile file:".red().bold(),
-                err
-            );
+            println!("{}: {}: {}", ERROR_PARSING.red().bold(), &profile_file, err);
             process::exit(1);
         }
     };
@@ -81,4 +76,21 @@ fn main() {
     config.update(profile);
 
     config.print();
+}
+
+// Read the content of a file and return it as String.
+// In case of errors exit the process with return code 1.
+fn read_file(f: &str) -> String {
+    match fs::read_to_string(&f) {
+        Ok(file) => file,
+        Err(err) => {
+            println!(
+                "{} {}: {}",
+                "An error occurred while reading:".red().bold(),
+                &f,
+                err
+            );
+            process::exit(1);
+        }
+    }
 }
