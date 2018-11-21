@@ -5,8 +5,9 @@
 
 #[macro_use]
 extern crate pest_derive;
-
+#[macro_use]
 extern crate clap;
+
 extern crate colored;
 extern crate indexmap;
 extern crate pest;
@@ -22,12 +23,11 @@ use colored::Colorize;
 
 use crate::parsers::slice;
 
-const VERSION: &str = "0.1.0";
 const AUTHOR: &str = "Daniele Tricoli <eriol@mornie.org>";
 
 fn main() {
     let matches = App::new("conf-form")
-        .version(VERSION)
+        .version(crate_version!())
         .author(AUTHOR)
         .about("Fill configuration files with values from profiles")
         .arg(
