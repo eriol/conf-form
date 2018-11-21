@@ -55,19 +55,30 @@ fn main() {
         Ok(config) => config,
         Err(err) => {
             println!(
-                "{}",
-                "An error occurred parsing configuration file:".red().bold()
+                "{}:\n{}",
+                "An error occurred parsing configuration file:".red().bold(),
+                err
             );
-            println!("{}", err);
             process::exit(1);
         }
     };
 
-    let profile = fs::read_to_string(matches.value_of("profile").unwrap())
+    let profile_file = fs::read_to_string(matches.value_of("profile").unwrap())
         .expect("Can't read the profile file.");
-    let profile_map: BTreeMap<String, String> = serde_yaml::from_str(&profile).unwrap();
 
-    config.update(profile_map);
+    let profile: BTreeMap<String, String> = match serde_yaml::from_str(&profile_file) {
+        Ok(profile) => profile,
+        Err(err) => {
+            println!(
+                "{}: {}",
+                "An error occurred parsing profile file:".red().bold(),
+                err
+            );
+            process::exit(1);
+        }
+    };
+
+    config.update(profile);
 
     config.print();
 }
