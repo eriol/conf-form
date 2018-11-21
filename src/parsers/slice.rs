@@ -78,13 +78,16 @@ fn update() {
     let conf = "
         Author.name = eriol
         Author.like = rust, python
+        Author.web = example.org
     ".to_string();
 
     let mut m = BTreeMap::new();
     m.insert("Author.like".to_string(), "rust, python, c++".to_string());
+    m.insert("Author.web".to_string(), "example.org:8080".to_string());
 
     let mut c = parse(&conf).unwrap();
     c.update(m);
 
     assert_eq!(c.map["Author.like"], "rust, python, c++");
+    assert_eq!(c.map["Author.web"], "example.org:8080");
 }
