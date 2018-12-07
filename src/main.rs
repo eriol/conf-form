@@ -5,20 +5,14 @@
 
 #[macro_use]
 extern crate pest_derive;
-#[macro_use]
-extern crate clap;
 
-extern crate colored;
-extern crate indexmap;
-extern crate pest;
-
-pub mod parsers;
+mod parsers;
 
 use std::collections::BTreeMap;
 use std::fs;
 use std::process;
 
-use clap::{App, Arg};
+use clap::{crate_version, App, Arg};
 use colored::Colorize;
 
 use crate::parsers::slice;
@@ -39,7 +33,8 @@ fn main() {
                 .short("c")
                 .takes_value(true)
                 .value_name("FILE"),
-        ).arg(
+        )
+        .arg(
             Arg::with_name("profile")
                 .help("The profile used to fill the template")
                 .long("profile")
@@ -47,7 +42,8 @@ fn main() {
                 .short("p")
                 .takes_value(true)
                 .value_name("FILE"),
-        ).get_matches();
+        )
+        .get_matches();
 
     // We can unwrap because config is required.
     let config_file = matches.value_of("config").unwrap();

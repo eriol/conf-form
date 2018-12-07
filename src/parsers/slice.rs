@@ -65,7 +65,8 @@ fn parse_from_string() {
     let conf = "
         Author.name = eriol
         Author.like = rust, python
-    ".to_string();
+    "
+    .to_string();
 
     let c = parse(&conf).unwrap();
 
@@ -79,7 +80,8 @@ fn update() {
         Author.name = eriol
         Author.like = rust, python
         Author.web = example.org
-    ".to_string();
+    "
+    .to_string();
 
     let mut m = BTreeMap::new();
     m.insert("Author.like".to_string(), "rust, python, c++".to_string());
