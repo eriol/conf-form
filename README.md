@@ -12,7 +12,7 @@ a key not present in the configuration file it's ignored.
 
 Given the following configuration file:
 ```
-❯ cat conf.txt 
+❯ cat conf.txt
 Author.Name = eriol
 # This comment will be stripped out
 Author.Like = rust, python
@@ -29,8 +29,16 @@ The.cake.is: a lie # this will be ignored since not in the configuration file
 `conf-form` will produce:
 
 ```
-❯ conf-form --config conf.txt --profile p1.yaml 
+❯ conf-form --config conf.txt --profile p1.yaml
 Author.Name = eriol
 Author.Like = rust, python, c++
 ```
 
+Warnings for keys only present in profiles can be showed using `-w` flag.
+
+```
+❯ conf-form -w --config conf.txt --profile p1.yaml
+Warning: The.cake.is key is not present in config file.
+Author.Name = eriol
+Author.Like = rust, python, c++
+```
