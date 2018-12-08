@@ -12,18 +12,17 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::process;
 
-use clap::{crate_version, App, Arg};
+use clap::{crate_authors, crate_version, App, Arg};
 use colored::Colorize;
 
 use crate::parsers::slice;
 
-const AUTHOR: &str = "Daniele Tricoli <eriol@mornie.org>";
 const ERROR_PARSING: &str = "An error occurred while parsing:";
 
 fn main() {
     let matches = App::new("conf-form")
         .version(crate_version!())
-        .author(AUTHOR)
+        .author(crate_authors!())
         .about("Fill configuration files with values from profiles")
         .arg(
             Arg::with_name("config")
