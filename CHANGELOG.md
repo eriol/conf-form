@@ -1,3 +1,7 @@
+0.3.0 (2018-12-08)
+==================
+* Show warnings for keys present only in profiles.
+
 0.2.1 (2018-11-21)
 ==================
 * Don't use expect().
