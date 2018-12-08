@@ -42,6 +42,7 @@ fn main() {
                 .takes_value(true)
                 .value_name("FILE"),
         )
+        .arg(Arg::with_name("warning").help("Show warnings").short("w"))
         .get_matches();
 
     // We can unwrap because config is required.
@@ -70,7 +71,7 @@ fn main() {
 
     config.update(profile);
 
-    config.print();
+    config.print(matches.is_present("warning"));
 }
 
 // Read the content of a file and return it as String.
